@@ -230,4 +230,4 @@ ueh_stop.sh .
 # 快速事件接入
 [Zabbix事件接入](http://123.60.39.174:18181/docs/ueh/ueh-1g0d89jk0b751)
 
-[API接口事件接入](http://123.60.39.174:18181/docs/ueh/ueh-1g0d89jk0b751)
+[API接口事件接入](http://123.60.39.174:18181/docs/ueh/ueh-1g3u2vo84cv9q)
