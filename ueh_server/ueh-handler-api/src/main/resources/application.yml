@@ -1,0 +1,82 @@
+#Probe参数配置
+probe:
+  key: f006afa0-0b97-11ec-89ad-2753267550e3
+  name: API-HANDLER
+  type: HANDLER
+  eventSourceType: RESTAPI
+  version: 1.0
+  #接收事件端口
+  port: 33335
+  #与Dispatcher线路检测间隔，单位秒
+  heartbeat: 10
+  #与Dispatcher线路超时设置，单位毫秒
+  timeout: 5000
+  #Probe并发处理能力，为0时根据系统CPU个数自动适配
+  threadCount: 1
+  source: file
+  executeScope: M
+#项目信息
+project: 
+  id: 10
+  name: Your Event
+  #信息信息来源，file为本地文件，database为从数据库中读取
+  source: file
+#Probe状态信息上报
+state: 
+  jdbc: 
+    driverClassName: org.postgresql.Driver
+    databaseType: postgresql
+    url: jdbc:postgresql://127.0.0.1:5432/ueh?currentSchema=ueh_admin&TimeZone=PRC
+    username: postgres
+    password: 123456
+            # 初始连接数
+    initialSize: 5
+            # 最小连接池数量
+    minIdle: 10
+            # 最大连接池数量
+    maxTotal: 20
+            # 配置获取连接等待超时的时间
+    maxWaitSeconds: 60
+rules: 
+  jdbc: 
+    driverClassName: org.postgresql.Driver
+    databaseType: postgresql
+    url: jdbc:postgresql://127.0.0.1:5432/ueh?currentSchema=ueh_admin&TimeZone=PRC
+    username: postgres
+    password: 123456
+            # 初始连接数
+    initialSize: 5
+            # 最小连接池数量
+    minIdle: 10
+            # 最大连接池数量
+    maxTotal: 20
+            # 配置获取连接等待超时的时间
+    maxWaitSeconds: 60  
+delivery: 
+  data[0]:
+    type: EMAIL
+    host: localhost
+    port: 44445
+    enable: true
+  data[1]:
+    type: SHARE
+    host: localhost
+    port: 44446
+    enable: false
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-total: 100
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+    timeout: 30000
+server:
+  port: 8187
+logging:
+#  config: classpath:log4j2.xml
+  config: config/log4j2.xml

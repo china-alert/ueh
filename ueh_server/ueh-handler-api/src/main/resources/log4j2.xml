@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug" monitorInterval="60">
+	<properties>
+		<property name="LOG_HOME">/var/log</property>
+	</properties>
+	<Appenders>
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</Console>
+		<!-- 按照一定规则拆分的日志文件的appender -->  <!-- 拆分后的文件 -->
+		<RollingFile name="rollingFile" fileName="${LOG_HOME}/ueh-handler-api.log" filePattern="${LOG_HOME}/$${date:yyyy}/ueh-handler-api-%d{yyyy-MM-dd}-%i.log">
+			<!-- 日志消息格式 -->
+			<PatternLayout pattern="[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] %l %c{36} - %msg%n" />
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1"/>
+			</Policies>
+			<!-- 在同一个目录下，文件的个限定为 10个，超过进行覆盖 -->
+			<DefaultRolloverStrategy max="31">
+				<Delete basePath="${LOG_HOME}/$${date:yyyy}/" maxDepth="2">
+					<IfFileName glob="ueh-handler-api*.log"/>
+					<IfLastModified age="30d"/>
+				</Delete>
+			</DefaultRolloverStrategy>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="console" />
+			<AppenderRef ref="rollingFile" />
+		</Root>
+	</Loggers>
+</Configuration>

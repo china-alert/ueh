@@ -1,0 +1,52 @@
+#Probe参数配置
+probe:
+  key: f006afa0-0b97-11ec-89ad-2753267550e3
+  name: API-probe
+  type: RESTAPI
+  eventSourceType: RESTAPI
+  version: 1.0
+  #接收事件端口
+  port: 11113
+  #与Dispatcher线路检测间隔，单位秒
+  heartbeat: 10
+  #与Dispatcher线路超时设置，单位毫秒
+  timeout: 5000
+  #Probe并发处理能力，为0时根据系统CPU个数自动适配
+  threadCount: 1
+  source: file
+  executeScope: M
+#项目信息
+project:
+  id: 10
+  name: Your Event
+  #信息信息来源，file为本地文件，database为从数据库中读取
+  source: file
+#转发程序地址
+dispatcher:
+  host: localhost
+  port: 22223
+  enable: true
+config:
+  jdbc:
+    driverClassName: org.postgresql.Driver
+    databaseType: postgresql
+    url: jdbc:postgresql://127.0.0.1:5432/ueh?currentSchema=ueh_admin&TimeZone=PRC
+    username: postgres
+    password: 123456
+            # 初始连接数
+    initialSize: 5
+            # 最小连接池数量
+    minIdle: 10
+            # 最大连接池数量
+    maxTotal: 20
+            # 配置获取连接等待超时的时间
+    maxWaitSeconds: 60
+server:
+  port: 9090
+  servlet: 
+    context_path: /probe-api
+  tomcat:
+    uri-encoding: UTF-8
+logging:
+#  config: classpath:log4j2.xml
+  config: config/log4j2.xml

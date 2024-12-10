@@ -1,0 +1,91 @@
+#Probe参数配置
+probe:
+  key: a834ad5e-0d70-86c3-8b4a-c0c3bfdbe5f5
+  name: zabbix_dispatcher
+  type: DISPATCHER
+  eventSourceType: PROBE
+  executeScope: M
+  version: 1.0
+  #接收事件端口
+  port: 22223
+  #与Dispatcher线路检测间隔，单位秒
+  heartbeat: 10
+  #与Dispatcher线路超时设置，单位毫秒
+  timeout: 5000
+  #Probe并发处理能力，为0时根据系统CPU个数自动适配
+  threadCount: 1
+  source: file
+#disptcher策略，batch数量，interval周期，两个任何一个先满足就开始dispatcher
+dispatcher:
+  batch: 1000
+  #间隔周期，单位s
+  interval: 2
+  timerEnable: true
+#项目信息
+project: 
+  id: 10
+  name: Your Event
+  #信息信息来源，file为本地文件，database为从数据库中读取
+  source: file
+handler: 
+  data[0]:
+    type: CASCADE
+    host: localhost
+    port: 33336
+    enable: true
+    protocolVersion: V2
+  data[1]:
+    type: ZABBIX
+    host: localhost
+    port: 33334
+    enable: true
+    protocolVersion: V1
+  data[2]:
+    type: RESTAPI
+    host: localhost
+    port: 33335
+    enable: true
+    protocolVersion: V1
+  data[3]:
+    type: SYSLOG
+    host: localhost
+    port: 33337
+    enable: true
+    protocolVersion: V2
+config:
+  jdbc: 
+    driverClassName: org.postgresql.Driver
+    databaseType: postgresql
+    url: jdbc:postgresql://127.0.0.1:5432/ueh?currentSchema=ueh_admin&TimeZone=PRC
+    username: postgres
+    password: 123456
+            # 初始连接数
+    initialSize: 5
+            # 最小连接池数量
+    minIdle: 10
+            # 最大连接池数量
+    maxTotal: 20
+            # 配置获取连接等待超时的时间
+    maxWaitSeconds: 60
+logging:
+#  config: classpath:log4j2.xml
+  config: config/log4j2.xml
+#参数说明：event.strategy.status.cron不保留的事件策略状态更新未不启用
+#参数说明：event.strategy.running.status.cron更新维护期策略状态（未执行、执行中、已执行）
+#参数说明：event.delete.cron 实时告警表执行删除时间,cron表达式
+#参数说明：event.delete.interval实时告警表保留数据时长,单位小时
+event:
+  autoRecovery:
+    inform: false
+    unrecoverable: false
+  autoConfirm:
+    recovery: false
+  strategy:
+    status:
+      cron: 0 * * * * ?
+    running:
+      status:
+        cron: 36 0/1 * * * ?
+  delete:
+    cron: 0 0/1 * * * ?
+    interval: 72

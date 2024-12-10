@@ -1,0 +1,73 @@
+#Probe参数配置
+probe:
+  key: a834ad5e-0d70-86c3-8b4a-c0c3bfdbe5f5
+  name: zabbix-transmit
+  type: HANDLER
+  eventSourceType: ZABBIX
+  version: 1.0
+  #接收事件端口
+  port: 44445
+  #与Dispatcher线路检测间隔，单位秒
+  heartbeat: 10
+  #与Dispatcher线路超时设置，单位毫秒
+  timeout: 5000
+  #Probe并发处理能力，为0时根据系统CPU个数自动适配
+  threadCount: 1
+  source: file
+  executeScope: M
+#项目信息
+project:
+  id: 10
+  name: Your Event
+  #信息信息来源，file为本地文件，database为从数据库中读取
+  source: file
+#Probe状态信息上报
+transmit:
+  batch: 1
+  #间隔周期，单位s
+  interval: 1
+config:
+  jdbc:
+    driverClassName: org.postgresql.Driver
+    databaseType: postgresql
+    url: jdbc:postgresql://127.0.0.1:5432/ueh?currentSchema=ueh_admin&TimeZone=PRC
+    username: postgres
+    password: 123456
+            # 初始连接数
+    initialSize: 5
+            # 最小连接池数量
+    minIdle: 10
+            # 最大连接池数量
+    maxTotal: 20
+            # 配置获取连接等待超时的时间
+    maxWaitSeconds: 60
+delivery:
+  data[0]:
+    type: EMAIL
+    host: localhost
+    port: 44444
+    enable: false
+  data[1]:
+    type: SHARE
+    host: localhost
+    port: 44445
+    enable: false
+logging:
+#  config: classpath:log4j2.xml
+  config: config/log4j2.xml
+  level:
+    com.mcinfotech.event.transmit.http.OpenFeignService: debug
+# 维护期事件，维护期结束后处理动作
+filter:
+  task:
+    cron: 0 0/2 * * * ?
+# 告警未恢复重复通知
+repeat:
+  notification:
+    cron: 0 0/1 * * * ?
+# 组件状态，master slave,值为slave时关联通知策略、通知日志会写一份到主中心
+component:
+  status: master
+# 发送邮件超时时间，毫秒
+email:
+  timeout: 10000

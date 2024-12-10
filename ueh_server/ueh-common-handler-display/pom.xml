@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>cn.mcinfotech</groupId>
+	<artifactId>ueh-common-handler-display</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<maven.compiler.source>8</maven.compiler.source>
+		<maven.compiler.target>8</maven.compiler.target>
+		<protostuff.version>1.7.2</protostuff.version>
+		<springboot.version>2.1.1.RELEASE</springboot.version>
+		<netty.version>4.1.60.Final</netty.version>
+		<fastjson.version>1.2.83</fastjson.version>
+	</properties>
+	<dependencies>
+		<dependency>
+			<groupId>cn.mcinfotech</groupId>
+			<artifactId>data-service2</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>cn.mcinfotech</groupId>
+			<artifactId>ueh-common-handler-config</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+	<description>2023年7月20号，项目废弃不用，有用代码已迁移到ueh-common-handler、ueh-common-handler-display中</description>
+</project>
