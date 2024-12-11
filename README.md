@@ -19,7 +19,7 @@
 - 开放式架构，支持HTTP协议 、REST API规范、Webhook接口，方便不同监控软件告警对接集成。
 
 ## 逻辑架构
-![image](https://github.com/user-attachments/assets/0c8c4908-4009-4ea2-9a78-30613c9eb147)
+![image](https://github.com/user-attachments/assets/135e29c9-c5b0-4474-b050-1cdd5be26a67)
 
 ## 外部接口
 竭峙统一事件平台UEH（Unified Event Handler）对外提供接口
@@ -189,7 +189,8 @@ password: 123456
 1、使用命令`ps -ef |grep tomcat`查看Tomcat服务，如出现tomcat字样代表服务已启动
 
 2、在浏览器中输入http://127.0.0.1/umc 当出现如下界面，则表示操作安装成功，登录用户名admin,密码123456。
-![image](https://github.com/user-attachments/assets/fc7e0a87-b202-4ec5-a218-ba15435161e7)
+![image](https://github.com/user-attachments/assets/071e189c-bd0a-43e1-97c4-ffc87c751d4a)
+
 
 
 ## 后端处理程序安装，UEH（Unified Event Handler）可对各种监控工具产生的告警进行汇聚和处理
