@@ -107,7 +107,7 @@ source /app/images/umc.sql
 ```shell
 su - postgres
 # 切换到postgres用户
-/app/images/ueh.sql | psql ueh
+psql -dpostgres -Uroot -W -fueh.sql
 # 导入数据库
 exit
 # 退出
