@@ -270,18 +270,17 @@ public class HttpPusher implements IPusher<ProbeEventMessage> {
                                 //告警事件已恢复事件状态更新为已完成
                                 flowStatus = "1";
                             }
-                            if (delayTime == 0) {//未设置延迟时间或恢复事件
-                                //记录日志
-                                saveNotificationLog(projectId, mapMessage, candidateVo, key, flowStatus);
-                                //确认状态
-                                eventConfig.updateEventAcknowledgedStatus(mapMessage, flowStatus, projectId, componentStatus);
-                                //通知
-                                notify(key, value, mapMessage);
-                            } else {
-                                //设置了延迟时间的告警事件
-                                //延迟通知是针对告警事件，如果在delay时间间隔内未恢复则通知，恢复事件没必要延时通知
-                                if ("1".equals(eventSeverityType)) {
-                                    //1.告警事件
+                            //1.告警事件
+                            //延迟通知是针对告警事件，如果在delay时间间隔内未恢复则通知，恢复事件没必要延时通知
+                            if ("1".equals(eventSeverityType)) {
+                                if (delayTime == 0) {//未设置延迟时间
+                                    //记录日志
+                                    saveNotificationLog(projectId, mapMessage, candidateVo, key, flowStatus);
+                                    //确认状态
+                                    eventConfig.updateEventAcknowledgedStatus(mapMessage, flowStatus, projectId, componentStatus);
+                                    //通知
+                                    notify(key, value, mapMessage);
+                                } else {//设置了延迟时间的告警事件
                                     long delayMilliSecond = lastOccurrence + delayTime - LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
                                     Timer timer = new Timer();
                                     TimerTask timerTask = new TimerTask() {
@@ -313,39 +312,39 @@ public class HttpPusher implements IPusher<ProbeEventMessage> {
                                     };
                                     //1.任务  2.时间（毫秒）
                                     timer.schedule(timerTask, delayMilliSecond > 0 ? delayMilliSecond : 1);
-                                }else {
-                                    //2.恢复事件
-                                    //2.1告警事件已通知，恢复事件如果符合通知条件也通知
-                                    //2.2告警事件未通知，恢复事件即使符合通知条件也不通知
-                                    DataLoadParams dataLoadParams = new DataLoadParams();
-                                    HashMap<Object, Object> filter = new HashMap<>();
-                                    filter.put("projectId", projectId);
-                                    filter.put("eventId", eventID);
-                                    dataLoadParams.setFilter(JSON.toJSONString(filter));
-                                    dataLoadParams.setDcName("getProblemIdByOkId");
-                                    dataLoadParams.setProjectId(projectId);
-                                    dataLoadParams.setStart(1);
-                                    dataLoadParams.setLimit(-10);
-                                    ResultPattern res = DataServiceUtils.dataLoad(dataSource, dataLoadParams);
-                                    if (!res.isSuccess()||res.isEmpty()) {
-                                        continue;
-                                    }
-                                    String problemId = res.getListData().get(0)+"";
-                                    filter.put("eventId", problemId);
-                                    dataLoadParams.setFilter(JSON.toJSONString(filter));
-                                    dataLoadParams.setDcName("getNoticeByProblemId");
-                                    res = DataServiceUtils.dataLoad(dataSource, dataLoadParams);
-                                    if (!res.isSuccess()||res.getDatas().size()==0) {
-                                        continue;
-                                    }
-                                    //记录日志
-                                    saveNotificationLog(projectId, mapMessage, candidateVo, key, flowStatus);
-                                    //确认状态
-                                    eventConfig.updateEventAcknowledgedStatus(mapMessage, flowStatus, projectId, componentStatus);
-                                    //通知
-                                    notify(key, value, mapMessage);
                                 }
-
+                            }
+                            if ("2".equals(eventSeverityType)) {
+                                //2.恢复事件
+                                //2.1告警事件已通知，恢复事件如果符合通知条件也通知
+                                //2.2告警事件未通知，恢复事件即使符合通知条件也不通知
+                                DataLoadParams dataLoadParams = new DataLoadParams();
+                                HashMap<Object, Object> filter = new HashMap<>();
+                                filter.put("projectId", projectId);
+                                filter.put("eventId", eventID);
+                                dataLoadParams.setFilter(JSON.toJSONString(filter));
+                                dataLoadParams.setDcName("getProblemIdByOkId");
+                                dataLoadParams.setProjectId(projectId);
+                                dataLoadParams.setStart(1);
+                                dataLoadParams.setLimit(-10);
+                                ResultPattern res = DataServiceUtils.dataLoad(dataSource, dataLoadParams);
+                                if (!res.isSuccess() || res.isEmpty()) {
+                                    continue;
+                                }
+                                String problemId = res.getListData().get(0) + "";
+                                filter.put("eventId", problemId);
+                                dataLoadParams.setFilter(JSON.toJSONString(filter));
+                                dataLoadParams.setDcName("getNoticeByProblemId");
+                                res = DataServiceUtils.dataLoad(dataSource, dataLoadParams);
+                                if (!res.isSuccess() || res.getDatas().size() == 0) {
+                                    continue;
+                                }
+                                //记录日志
+                                saveNotificationLog(projectId, mapMessage, candidateVo, key, flowStatus);
+                                //确认状态
+                                eventConfig.updateEventAcknowledgedStatus(mapMessage, flowStatus, projectId, componentStatus);
+                                //通知
+                                notify(key, value, mapMessage);
                             }
                         }
                     }
