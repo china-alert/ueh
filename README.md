@@ -107,7 +107,7 @@ source /app/images/umc.sql
 ```shell
 su - postgres
 # 切换到postgres用户
-/app/images/ueh.sql | psql ueh
+psql -dpostgres -Uroot -W -fueh.sql
 # 导入数据库
 exit
 # 退出
@@ -174,7 +174,9 @@ cd /app/images/
 # 进入tomcat安装目录
 vi setup-tomcat.sh
 # 修改TOMCAT安装脚本参数,(见setup-tomcat.sh 参数说明)
-cd /app/apache-tomcat-9.0.74/webapps/umc/WEB-INF/classes
+/app/apache-tomcat-9.0.74/bin/startup.sh
+# 启动tomcat
+cd /app/apache-tomcat-9.0.74/webapps/xyz_b/WEB-INF/classes
 # 进入umc文件夹
 vi application-druid.yml
 # 编辑数据库连接配置文件，并保存退出
@@ -182,6 +184,8 @@ url: jdbc:mysql://127.0.0.1:3306/umc?useUnicode=true&characterEncoding=utf8&zero
 username: root
 password: 123456
 # application-druid.yml 文件内容
+/app/apache-tomcat-9.0.74/bin/shutdown.sh
+# 停止tomcat
 /app/apache-tomcat-9.0.74/bin/startup.sh
 # 启动tomcat
 ```
