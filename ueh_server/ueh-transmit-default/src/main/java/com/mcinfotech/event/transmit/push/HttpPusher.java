@@ -47,7 +47,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URI;
-import java.time.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
@@ -229,7 +231,7 @@ public class HttpPusher implements IPusher<ProbeEventMessage> {
                                     }
                                 }
                             }
-                            if (repeatNotification.getNotificationCount() > 0) {
+                            if (repeatNotification.getNotificationCount() > 0 && "1".equals(mapMessage.get(eventColumnEventSeverityType) + "")) {
                                 saveRepeatNotification(repeatNotification);
                             }
                         }
@@ -260,7 +262,7 @@ public class HttpPusher implements IPusher<ProbeEventMessage> {
                             long delayTime = delayNotice.get(key) * 60 * 1000;
                             String eventID = (String) mapMessage.get("EventID");
                             Object recoveredStatus = mapMessage.get("recoveredStatus");
-                            String eventSeverityType = mapMessage.get(eventColumnEventSeverityType)+"";
+                            String eventSeverityType = mapMessage.get(eventColumnEventSeverityType) + "";
                             long lastOccurrence = (long) mapMessage.get("LastOccurrence");
                             String flowStatus = "2";
                             if ("1".equals(recoveredStatus + "")) {
@@ -270,6 +272,7 @@ public class HttpPusher implements IPusher<ProbeEventMessage> {
                                 //告警事件已恢复事件状态更新为已完成
                                 flowStatus = "1";
                             }
+
                             //1.告警事件
                             //延迟通知是针对告警事件，如果在delay时间间隔内未恢复则通知，恢复事件没必要延时通知
                             if ("1".equals(eventSeverityType)) {
@@ -334,17 +337,44 @@ public class HttpPusher implements IPusher<ProbeEventMessage> {
                                 String problemId = res.getListData().get(0) + "";
                                 filter.put("eventId", problemId);
                                 dataLoadParams.setFilter(JSON.toJSONString(filter));
-                                dataLoadParams.setDcName("getNoticeByProblemId");
+                                dataLoadParams.setDcName("getCandidateByProblemId");
                                 res = DataServiceUtils.dataLoad(dataSource, dataLoadParams);
-                                if (!res.isSuccess() || res.getDatas().size() == 0) {
+                                if (!res.isSuccess() || CollectionUtils.isEmpty(res.getListData())) {
                                     continue;
                                 }
-                                //记录日志
-                                saveNotificationLog(projectId, mapMessage, candidateVo, key, flowStatus);
-                                //确认状态
-                                eventConfig.updateEventAcknowledgedStatus(mapMessage, flowStatus, projectId, componentStatus);
-                                //通知
-                                notify(key, value, mapMessage);
+                                List<Object> noticeLogList = res.getListData();
+                                List<CandidateVo> candidateVos = new ArrayList<>();
+                                for (Object noticeLog : noticeLogList) {
+                                    String noticeLogStr = String.valueOf(noticeLog);
+                                    List<CandidateVo> candidateVosTemp = JSON.parseArray(noticeLogStr, CandidateVo.class);
+                                    candidateVos.addAll(candidateVosTemp);
+                                }
+                                List<String> notifiedList = new ArrayList<>();
+                                for (CandidateVo vo : candidateVos) {
+                                    List<String> notificationTypes = vo.getNotification_types();
+                                    int index = notificationTypes.indexOf(key) == -1 ? -1 : notificationTypes.indexOf(key);
+                                    if (index != -1) {
+                                        notifiedList.add(vo.getCandidate());
+                                    }
+                                }
+                                Iterator<EventHandleUser> notifies = value.iterator();
+                                Map<EventHandleUser, List> candidateVoTemp = new HashMap<>();
+                                while (notifies.hasNext()) {
+                                    EventHandleUser currentUser = notifies.next();
+                                    if (notifiedList.contains(currentUser.getDomainName())) {
+                                        candidateVoTemp.put(currentUser,Arrays.asList(key));
+                                        continue;
+                                    }
+                                    notifies.remove();
+                                }
+                                if (value.size() > 0) {
+                                    //记录日志
+                                    saveNotificationLog(projectId, mapMessage, candidateVoTemp, key, flowStatus);
+                                    //确认状态
+                                    eventConfig.updateEventAcknowledgedStatus(mapMessage, flowStatus, projectId, componentStatus);
+                                    //通知
+                                    notify(key, value, mapMessage);
+                                }
                             }
                         }
                     }
@@ -352,6 +382,7 @@ public class HttpPusher implements IPusher<ProbeEventMessage> {
             }
         }
     }
+
 
     private void saveRepeatNotification(RepeatNotification repeatNotification) {
         DataLoadParams dataLoadParams = new DataLoadParams();
