@@ -31,6 +31,7 @@
 | 1.       | PostgreSql     | 15.2     | 存储告警事件               |
 | 2.       | Tomcat         | 9.0.74   | Web应用服务                |
 | 3.       | jdk            | 8u231    | JAVA 开发环境              |
+| 4.       | Mysql          | 8.0.32   | 存放集中监控系统的配置数据   |
 
 ### 运行环境
 
@@ -62,10 +63,10 @@ TEL:18001261978
 
 | **安装顺序**       | **安装文件**                   | **用途**                  |**下载地址**                  |
 | ------------------ | ------------------------------ | ------------------------- | ------------------------- |
-| 1. Web服务   | setup-web.zip   | Web服务Tomcat             |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgiOydvAYo8O2D_QY.zip?f=setup-web.zip&v=1736930887             |
-| 2. 数据库文件       | setup-script.zip                     | 门户UMC程序数据库文件 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgg_ydvAYo7IuuoAE.zip?f=setup-script.zip&v=1736930819             |
-| 3. 事件处理程序        |  setup-backend.zip| 后台事件处理 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgiuydvAYoutLauAY.zip?f=setup-backend.zip&v=1736930917             |
-| 4. jdk        |  setup-jdk.zip| java环境 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgjOydvAYo0vXL9gE.zip?f=setup-jdk.zip&v=1736930919            |
+| 1. Web服务   | setup-web.zip   | Web服务Tomcat             |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAg5NrZugYo2eflsQE.zip?f=setup-web.zip&v=1733717374             |
+| 2. 数据库文件       | setup-script.zip                     | 门户UMC程序数据库文件 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgn9vZugYo4O3H0gE.zip?f=setup-script.zip&v=1733717407             |
+| 3. 事件处理程序        |  setup-backend.zip| 后台事件处理 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAg9pPZugYopaLtuwc.zip?f=setup-backend.zip&v=1733708326             |
+| 4. jdk        |  setup-jdk.zip| java环境 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAg1ZHaugYojIP90AM.zip?f=setup-jdk.zip&v=1733724451            |
 
 ### 创建/app/images目录，用于临时存放安装文件
 
@@ -84,8 +85,21 @@ cd /app/images/
 unzip "*.zip"
 ```
 ## 数据库导入
+### Mysql数据库导入
+已有Mysql可以直接导入，[点击跳转到Mysql参考安装](http://123.60.39.174:18181/docs/ueh/ueh-1g0ru1s3jt6ub)
+
+```shell
+mysql -uroot -ppassword -h127.0.0.1
+# 登录到门户mysql数据库
+create database umc
+# 创建umc数据库
+use umc
+#切换到umc数据库
+source /app/images/umc.sql
+# 导入数据库脚本
+```
 ### postgresql数据库导入
-已有Postgresql可以直接导入，[点击跳转到Postgresql参考安装](http://ueh.china-alert.com:18181/docs/uehueh-1g6jq090f6elj/Install-PostgreSQL)
+已有Postgresql可以直接导入，[点击跳转到Postgresql参考安装](http://123.60.39.174:18181/docs/ueh/Install-PostgreSQL)
 
 使用建库脚本ueh.gz执行导入数据库操作。
 
@@ -98,6 +112,22 @@ exit
 # 退出
 ```
 
+### 修改门户umc数据库参数
+
+连接MySQL的umc数据库，修改t_view_page_datasource表里的数据库的IP地址、用户名、密码。
+```shell
+mysql -uroot -p
+# 登录到mysql数据库
+use umc
+# 切换到umc数据库
+update t_view_page_datasource set url=replace(url,'127.0.0.1','postgresql数据库地址'),password=replace(password,'123456','postgresql数据库密码') where database_type='postgresql';
+# 修改数据源中postgresql数据库连接和密码
+update t_view_page_datasource set url=replace(url,'127.0.0.1','umc门户数据库地址'),password=replace(password,'123456','umc门户数据库密码')  where database_type='mysql';
+# 修改数据源中Mysql数据库连接和密码
+quit
+# 退出
+```
+
 ### 修改事件处理ueh数据库参数
 
 连接postgresql的ueh_admin数据库，修改t_view_page_datasource表里的数据库的IP地址、用户名、密码。
@@ -106,6 +136,8 @@ su - postgres
 # 切换到postgres用户
 psql
 # 进入PostgreSQL数据库
+update ueh_admin.t_view_page_datasource set url=replace(url,'127.0.0.1','umc门户数据库地址'),password=replace(password,'123456','umc门户数据库密码')  where database_type='mysql';
+# 修改数据源中Mysql数据库连接和密码
 update ueh_admin.t_view_page_datasource set url=replace(url,'127.0.0.1','postgresql数据库地址'),password=replace(password,'123456','postgresql数据库密码') where database_type='postgresql';
 INSERT INTO ueh_admin.t_view_page_dataset (name, ds_group, label_text, dataset_type, columns, label_texts, data_types, return_type, exec_type, exec_sql, filter_param_names, filter_values, main_datasource_name, union_dataset_names, union_condition, is_batch, batch_setting, is_enable, project_id, remark, lm_timestamp, union_filter_values) VALUES ('getCandidateByProblemId', '事件通知程序', '根据告警事件ID查询是否自动通知', 'S', 'candidate', '通知人', 'string', 'MRSC', 'QUERY', 'select candidate from t_event_notification_log where "event_id"=''${eventId}''', null, null, 'event_data', null, null, 'N', null, 'Y', 10, null, '2025-01-21 10:44:55.000000', null);
 # 修改数据源中postgresql数据库连接和密码
@@ -145,13 +177,13 @@ vi setup-tomcat.sh
 /app/apache-tomcat-9.0.74/bin/startup.sh
 # 启动tomcat
 cd /app/apache-tomcat-9.0.74/webapps/xyz_b/WEB-INF/classes
-# 进入文件夹
-vi application-druid-pg.yml
+# 进入umc文件夹
+vi application-druid.yml
 # 编辑数据库连接配置文件，并保存退出
-url: jdbc:postgresql://127.0.0.1:5432/ueh?currentSchema=ueh_admin
+url: jdbc:mysql://127.0.0.1:3306/umc?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
 username: root
 password: 123456
-# application-druid-pg.yml 文件内容,修改为实际postgresql数据库的连接、用户名和密码
+# application-druid.yml 文件内容
 /app/apache-tomcat-9.0.74/bin/shutdown.sh
 # 停止tomcat
 /app/apache-tomcat-9.0.74/bin/startup.sh
@@ -183,7 +215,7 @@ unzip "ueh*.zip"
 ```shell
 find . -iname application.yml|xargs sed -i 's/127.0.0.1:5432/新postgresql数据库地址:新postgresql数据库端口/g'
 # 修改数据库地址
-find . -iname application.yml|xargs sed -i 's/postgres/新postgresql用户名/g'
+find . -iname application.yml|xargs sed -i 's/root/新postgresql用户名/g'
 # 修改数据库用户名
 find . -iname application.yml|xargs sed -i 's/123456/新postgresql密码/g'
 # 修改数据库密码
@@ -201,6 +233,6 @@ ueh_stop.sh .
 ```
 
 # 快速事件接入
-[Zabbix事件接入](http://ueh.china-alert.com:18181/docs/uehueh-1g6jq090f6elj/ueh-1g0d89jk0b751)
+[Zabbix事件接入](http://123.60.39.174:18181/docs/ueh/ueh-1g0d89jk0b751)
 
-[API接口事件接入](http://ueh.china-alert.com:18181/docs/uehueh-1g6jq090f6elj/ueh-1g3u2vo84cv9q)
+[API接口事件接入](http://123.60.39.174:18181/docs/ueh/ueh-1g3u2vo84cv9q)
