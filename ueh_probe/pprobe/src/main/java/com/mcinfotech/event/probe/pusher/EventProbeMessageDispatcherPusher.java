@@ -45,8 +45,7 @@ public class EventProbeMessageDispatcherPusher implements IPusher<ProbeEventMess
 	}
 	@Override
 	public void push(String handlerType, List<ProbeEventMessage> messages) {
-		// TODO Auto-generated method stub
-		
+
 	}
 	@Override
 	public void push(String handlerType, ProbeEventMessage messages) {
