@@ -60,7 +60,6 @@ public class ReceiverServer {
 			future.channel().closeFuture().sync();
 		} catch (Exception e) {
 			e.printStackTrace();
-			// do nothing
 			logger.error("receiver server stop !");
 		} finally {
 			// 优雅退出，释放线程池资源
