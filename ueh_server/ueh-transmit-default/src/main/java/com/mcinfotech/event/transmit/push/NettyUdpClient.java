@@ -76,9 +76,4 @@ public class NettyUdpClient {
             });
         }
     }
-//    public static void main(String[] args) {
-//        NettyUdpClient client = new NettyUdpClient("gg bord   hhhhhhhhhhh!!!!!!!!!!!!!!!!!!!!!!!1真的棒");
-//        // 假设服务器地址是localhost，端口是8080
-//        client.connect("localhost", 60000);
-//    }
 }
