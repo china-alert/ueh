@@ -855,12 +855,4 @@ public class HttpPusher implements IPusher<ProbeEventMessage> {
         template.process(params, out);
         return out.toString();
     }
-
-    //    public static void main(String[] args) throws IOException, TemplateException {
-//        HashMap<String, Object> msg = new HashMap<>();
-//        msg.put("summary", "中");
-//        String template="${methodToBytes(summary)}";
-//        HttpPusher httpPusher = new HttpPusher();
-//        httpPusher.buildBody(template, msg);
-//    }
 }
