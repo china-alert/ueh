@@ -1,6 +1,7 @@
 <p align="center">
+  <img src="./doc/shijianbao-logo.png" alt="shijianbao-logo" width="300" />
   <img src="./doc/jiezhi-logo.png" alt="jiezhi-logo" width="300" />
-
+  <h3 align="center">可对各种监控工具产生的告警进行汇聚，统一处理、集中展示，并通知</h3>
   <p align="center">Instant Observability for Cloud & AI Applications</p>
   <p align="center">Zero Code, Full Stack, eBPF & Wasm</p>
 </p>
@@ -30,7 +31,7 @@
 
 所有业务都在云上的客户，可以选择 SaaS 事件管理平台，如国外的PagerDuty、DataDog、国内的有Flashduty等。但对数据不能外出的场景，显然SaaS方案不可采用，必须有一套自建的、私有化的“统一事件管理平台”，竭峙信息的创始团队深耕智能监控领域20年，早年是IBM Omnibus 产品实施交付团队，积累了大量金融、国央企IT故障管理的行业经验，自研产品竭峙统一事件平台UEH（Unified Event Handler）以事件为纽带，从可用性管理角度，将人、工具、流程连接起来，建立 IT 故障管理的标准化过程和运营体系，大幅提升了IT运维的质量和效率。
 
-## 竭峙统一事件平台UEH（Unified Event Handler）可对各监控工具产生的告警进行汇聚，统一处理、集中展示，并通知。
+## 竭峙统一事件平台UEH（Unified Event Handler）可对各种监控工具产生的告警进行汇聚，统一处理、集中展示，并通知。
 ## 主要功能包括：  
 - 事件展示、查询、确认
 - 事件接入
