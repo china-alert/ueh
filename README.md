@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/deepflow-logo.png" alt="DeepFlow" width="300" />
+  <img src="./doc/jiezhi-logo.png" alt="jiezhi-logo" width="300" />
 
   <p align="center">Instant Observability for Cloud & AI Applications</p>
   <p align="center">Zero Code, Full Stack, eBPF & Wasm</p>
