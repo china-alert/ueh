@@ -1,15 +1,15 @@
 <p align="center">
   <img src="./doc/shijianbao-logo.png" alt="shijianbao-logo" width="300" />
   <img src="./doc/jiezhi-logo.png" alt="jiezhi-logo" width="300" />
-  <h3 align="center">可对各种监控工具产生的告警进行汇聚，统一处理、集中展示，并通知</h3>
-  <p align="center">Instant Observability for Cloud & AI Applications</p>
-  <p align="center">Zero Code, Full Stack, eBPF & Wasm</p>
+  <h2 align="center">可对各种监控工具产生的告警进行汇聚，统一处理、集中展示，并通知</h3>
+  <p align="center">业务都在公有云上的客户，可以选择 SaaS 事件管理平台，如国外的PagerDuty、DataDog、国内的有Flashduty等。</p>
+  <p align="center">但对告警不能外发的场景，显然SaaS方案不可采用，必须有一套自建的、私有化部署的“统一事件平台”</p>
+  <p align="center">竭峙统一事件平台UEH（Unified Event Handler）以事件为纽带，从可用性管理角度，将人、工具、流程连接起来，建立 IT 故障管理的标准化过程和运营体系，大幅提升了IT运维的质量和效率。竭峙的创始团队深耕智能监控领域20年，早年是IBM Omnibus 产品实施交付团队，积累了大量金融、国央企IT故障管理的行业经验，</p>
 </p>
 <p align="center">
-    <a href="https://zenodo.org/badge/latestdoi/448599559"><img src="https://zenodo.org/badge/448599559.svg" alt="DOI"></a>
-    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/deepflowio/deepflow"> </a>
-    <img alt="docker pulls" src="https://img.shields.io/docker/pulls/deepflowce/deepflow-agent?color=green?label=docker pulls"> </a>
-    <img alt="License" src="https://img.shields.io/github/license/deepflowio/deepflow?color=purple"> </a>
+    <img alt="GitHub Release" src="https://img.shields.io/github/v/release/china-alert/ueh"> </a>
+    <img alt="Github Stars" src="https://img.shields.io/github/stars/china-alert/ueh?color=%231890FF&style=flat-square"> </a>
+    <img alt="License" src="https://img.shields.io/github/license/china-alert/ueh?color=purple"> </a>
 </p>
 
 
@@ -21,15 +21,14 @@
 
 
 告警事件分散在多处，会带来以下几个问题：
-** 1、统一管理难：比如通知人的配置散落在各处，手机号、邮箱等每个监控工具都要配一遍。通知媒介（短信平台、电话呼叫、企业微信等接口）每个监控工具都需要配置，且有的监控工具可能API需要购买维保才提供服务，或者原厂已经不提供老旧版本的技术支持，或者原厂在国内已经没有服务。<br>
+** 1、告警分散、配置分散：比如通知人的配置散落在各处，手机号、邮箱等每个监控工具都要配一遍。通知媒介（短信平台、电话呼叫、企业微信等接口）每个监控工具都需要配置，且有的监控工具可能API需要购买维保才提供服务，或者原厂已经不提供老旧版本的技术支持，或者原厂在国内已经没有服务。<br>
 
-2、事件处理能力受限：有的监控工具在事件处理功能上偏弱，或者需要额外付费才能获得更高级的功能使用，想要做统一的变更窗口告警通知屏蔽（静默）、收敛降噪、筛选过滤、事件信息丰富等，非常痛苦。
+2、事件处理功能不全：大部分监控工具在事件处理功能上较弱，或者需要额外付费才能获得更高级的功能使用，想要做统一的变更窗口告警通知屏蔽（静默）、收敛降噪、筛选过滤、事件信息丰富等，非常痛苦。
 
 
 3、分散的告警不方便故障定位：临近触发的告警事件在时间维度上是有关联性的，如果把所有的告警放到一个地方展示，辅助故障定位，对于排障分析、故障定位非常有用。
 
-
-所有业务都在云上的客户，可以选择 SaaS 事件管理平台，如国外的PagerDuty、DataDog、国内的有Flashduty等。但对数据不能外出的场景，显然SaaS方案不可采用，必须有一套自建的、私有化的“统一事件管理平台”，竭峙信息的创始团队深耕智能监控领域20年，早年是IBM Omnibus 产品实施交付团队，积累了大量金融、国央企IT故障管理的行业经验，自研产品竭峙统一事件平台UEH（Unified Event Handler）以事件为纽带，从可用性管理角度，将人、工具、流程连接起来，建立 IT 故障管理的标准化过程和运营体系，大幅提升了IT运维的质量和效率。
+告警带有敏感信息，需要安全措施防范数据泄露。业务都在公有云上的客户，可以选择 SaaS 事件管理平台，如国外的PagerDuty、DataDog、国内的有Flashduty等。对数据不能外出的场景，显然SaaS方案不可采用，必须有一套自建的、私有化的“统一事件管理平台”，竭峙信息的创始团队深耕智能监控领域20年，早年是IBM Omnibus 产品实施交付团队，积累了大量金融、国央企IT故障管理的行业经验，自研产品竭峙统一事件平台UEH（Unified Event Handler）以事件为纽带，从可用性管理角度，将人、工具、流程连接起来，建立 IT 故障管理的标准化过程和运营体系，大幅提升了IT运维的质量和效率。
 
 ## 竭峙统一事件平台UEH（Unified Event Handler）可对各种监控工具产生的告警进行汇聚，统一处理、集中展示，并通知。
 ## 主要功能包括：  
