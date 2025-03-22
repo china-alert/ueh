@@ -14,7 +14,7 @@
 
 
 
-# 快速了解1
+# 快速了解
 ## 产品介绍
 
 随着分工越来越细，数据中心使用的监控工具越来越多，常见有基础架构监控Zabbix、擅长容器监控Prometheus、私有云的各种云管平台，数据库监控工具、带外监控、BPC旁路协议解析监控工具、Ebpf、APM应用监控等、还有些软件产品会内置自己独立的监控能力，比如联想的scom只提供邮件的通知方式，OceanBase，达梦等都有自己独立的监控体系和告警通知方式。告警事件分散在非常多的地方，形成一个又一个的告警孤岛。如何对IT故障进行更加高效、安全、低成本的管理，成为一个急需解决的问题。
@@ -59,8 +59,6 @@
 ## 通知服务
 ![image](https://github.com/user-attachments/assets/695a8771-0a66-41ee-a58a-c10dcdc1b1d1)
 
-
-
 ## 外部接口
 竭峙统一事件平台UEH（Unified Event Handler）对外提供接口
 
@@ -69,8 +67,7 @@
 | **序号** | **数据库名称** | **版本** | **用途**                    |
 | -------- | -------------- | -------- | ------------------------- |
 | 1.       | PostgreSql     | 15.2     | 存储告警事件               |
-| 2.       | Tomcat         | 9.0.74   | Web应用服务                |
-| 3.       | jdk            | 8u231    | JAVA 开发环境              |
+| 2.       | jdk            | 8u231    | JAVA 开发环境              |
 
 ### 运行环境
 
@@ -102,10 +99,8 @@ TEL:18001261978
 
 | **安装顺序**       | **安装文件**                   | **用途**                  |**下载地址**                  |
 | ------------------ | ------------------------------ | ------------------------- | ------------------------- |
-| 1. Web服务   | setup-web.zip   | Web服务Tomcat             |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgiOydvAYo8O2D_QY.zip?f=setup-web.zip&v=1736930887             |
-| 2. 数据库文件       | setup-script.zip                     | 门户UMC程序数据库文件 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgg_ydvAYo7IuuoAE.zip?f=setup-script.zip&v=1736930819             |
-| 3. 事件处理程序        |  setup-backend.zip| 后台事件处理 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgiuydvAYoutLauAY.zip?f=setup-backend.zip&v=1736930917             |
-| 4. jdk        |  setup-jdk.zip| java环境 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgjOydvAYo0vXL9gE.zip?f=setup-jdk.zip&v=1736930919            |
+| 1. 事件处理程序        |  setup-backend.zip| 后台事件处理 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgiuydvAYoutLauAY.zip?f=setup-backend.zip&v=1736930917             |
+| 2. jdk        |  setup-jdk.zip| java环境 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgjOydvAYo0vXL9gE.zip?f=setup-jdk.zip&v=1736930919            |
 
 ### 创建/app/images目录，用于临时存放安装文件
 
@@ -121,15 +116,17 @@ mkdir -p /app/images/
 
 ```shell
 cd /app/images/
-unzip "*.zip"
+unzip -d /app/ueh "*.zip"
 ```
 ## 数据库导入
 ### postgresql数据库导入
 已有Postgresql可以直接导入，[点击跳转到Postgresql参考安装](http://ueh.china-alert.com:18181/docs/uehueh-1g6jq090f6elj/Install-PostgreSQL)
 
-使用建库脚本ueh.gz执行导入数据库操作。
+使用建库脚本ueh.sql执行导入数据库操作。
 
 ```shell
+cd /app/ueh
+# 切换到数据库脚本所在目录
 su - postgres
 # 切换到postgres用户
 psql -dpostgres -Uroot -W -fueh.sql
@@ -153,13 +150,12 @@ quit
 # 退出PostgreSQL命令行客户端
 ```
 
-## 前端操作界面安装
-### 包括如下2部分程序安装
+## 环境安装
+### 包括如下程序安装
 
 | **安装顺序**       | **安装文件**                   | **用途**                  |
 | ------------------ | ------------------------------ | ------------------------- |
 | 1. JDK安装         | jdk-8u201-linux-x64.tar.gz<br>setup-jdk.sh | JAVA 运行环境             |
-| 2. Web服务Tomcat   | apache-tomcat-9.0.74.tar.gz <br>setup-tomcat.sh   | Web服务Tomcat             |
 
 ### 安装JDK
 | **顺序** | **参数**                              | **说明**                       |
@@ -173,46 +169,13 @@ vi setup-jdk.sh
 sh setup-jdk.sh install
 # 安装jdk
 ```
-### 安装tomcat
-| **序号** | **参数**            | **说明**                    |
-| -------- | ------------------- | --------------------------- |
-| 1.       | install_base="/app" | install_base:Tomcat安装目录 |
-```shell
-cd /app/images/
-# 进入tomcat安装目录
-vi setup-tomcat.sh
-# 修改TOMCAT安装脚本参数,(见setup-tomcat.sh 参数说明)
-/app/apache-tomcat-9.0.74/bin/startup.sh
-# 启动tomcat
-cd /app/apache-tomcat-9.0.74/webapps/xyz_b/WEB-INF/classes
-# 进入文件夹
-vi application-druid-pg.yml
-# 编辑数据库连接配置文件，并保存退出
-url: jdbc:postgresql://127.0.0.1:5432/ueh?currentSchema=ueh_admin
-username: root
-password: 123456
-# application-druid-pg.yml 文件内容,修改为实际postgresql数据库的连接、用户名和密码
-/app/apache-tomcat-9.0.74/bin/shutdown.sh
-# 停止tomcat
-/app/apache-tomcat-9.0.74/bin/startup.sh
-# 启动tomcat
-```
-### 服务检查
-1、使用命令`ps -ef |grep tomcat`查看Tomcat服务，如出现tomcat字样代表服务已启动
 
-2、在浏览器中输入http://127.0.0.1/umc 当出现如下界面，则表示操作安装成功，登录用户名admin,密码123456。
-![image](https://github.com/user-attachments/assets/071e189c-bd0a-43e1-97c4-ffc87c751d4a)
-
-
-
-## 后端处理程序安装，UEH（Unified Event Handler）可对各种监控工具产生的告警进行汇聚和处理
+## UEH处理程序安装，UEH（Unified Event Handler）可对各种监控工具产生的告警进行汇聚和处理
 
 ### UEH模块安装
 
 1、通过FTP方式上传安装文件ueh.zip至/app/images/目录下，并解压：
 ```shell
-unzip -d /app/ueh /app/images/setup-backend.zip
-# 解压总安装包
 cd /app/ueh
 # 切换到安装目录
 unzip "ueh*.zip"
@@ -222,21 +185,24 @@ unzip "ueh*.zip"
 2、修改数据库连接、用户名、密码
 ```shell
 find . -iname application.yml|xargs sed -i 's/127.0.0.1:5432/新postgresql数据库地址:新postgresql数据库端口/g'
+find . -iname application-druid-pg.yml|xargs sed -i 's/127.0.0.1:5432/新postgresql数据库地址:新postgresql数据库端口/g'
 # 修改数据库地址
 find . -iname application.yml|xargs sed -i 's/postgres/新postgresql用户名/g'
+find . -iname application-druid-pg.yml|xargs sed -i 's/postgres/新postgresql用户名/g'
 # 修改数据库用户名
 find . -iname application.yml|xargs sed -i 's/123456/新postgresql密码/g'
+find . -iname application-druid-pg.yml|xargs sed -i 's/123456/新postgresql密码/g'
 # 修改数据库密码
 ```
 
 ### 维护服务
 
 ```shell
-ueh_start.sh .
+sh ueh_start.sh .
 # 启动事件服务
-ueh_status.sh .
+sh ueh_status.sh .
 # 查看事件服务状态
-ueh_stop.sh .
+sh ueh_stop.sh .
 # 停止事件服务
 ```
 
