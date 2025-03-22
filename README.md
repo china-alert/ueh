@@ -205,6 +205,8 @@ sh ueh_status.sh .
 sh ueh_stop.sh .
 # 停止事件服务
 ```
+### 服务检查
+1、在浏览器中输入http://127.0.0.1/umc 当出现如下界面，则表示操作安装成功，登录用户名admin,密码123456。
 
 # 快速事件接入
 [Zabbix事件接入](http://ueh.china-alert.com:18181/docs/uehueh-1g6jq090f6elj/ueh-1g0d89jk0b751)
