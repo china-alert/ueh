@@ -164,9 +164,10 @@ quit
 ```shell
 cd /app/images/
 # 进入jdk安装目录
-vi setup-jdk.sh
-# 修改JDK安装脚本参数,(见setup-jdk.sh 参数说明)
+unzip setup-jdk.zip
+# 解压
 sh setup-jdk.sh install
+# 安装jdk
 # 安装jdk
 ```
 
