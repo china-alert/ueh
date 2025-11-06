@@ -99,7 +99,7 @@ TEL:18001261978
 
 | **安装顺序**       | **安装文件**                   | **用途**                  |**下载地址**                  |
 | ------------------ | ------------------------------ | ------------------------- | ------------------------- |
-| 1. 事件处理程序        |  setup-backend.zip| 后台事件处理 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAg0P34vgYo0KablgU.zip?f=setup-backend.zip&v=1742618392             |
+| 1. 事件处理程序        |  setup-backend.zip| 后台事件处理 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAg-PWyyAYoxIqgPg.zip?f=setup-backend.zip&v=1762442167             |
 | 2. jdk        |  setup-jdk.zip| java环境 |http://download.s21i.co99.net/29000100/0/0/ABUIABBPGAAgjOydvAYo0vXL9gE.zip?f=setup-jdk.zip&v=1736930919            |
 
 ### 创建/app/images目录，用于临时存放安装文件
