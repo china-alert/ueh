@@ -108,14 +108,6 @@
 	<build>
 		<finalName>ueh-dispatcher</finalName>
 		<plugins>
-			<!--<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>3.0.0</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>-->
 			<!--spring-boot-maven-plugin插件会将项目所有的依赖打入BOOT-INF/lib下，替换为maven-jar-plugin-->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
