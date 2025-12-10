@@ -3,7 +3,7 @@
 function read_dir(){
 for file in `ls $1`
 do
-  #如果当前文件是文件夹则递归处理
+  #如果当前文件是文件夹则递归处理 
   if [ -d $1"/"$file ]
   then
     read_dir $1"/"$file
